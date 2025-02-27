@@ -90,5 +90,45 @@ def main():
             st.metric("Dividend Yield", f"{info.get('dividendYield', 0):.2%}")
             st.metric("Beta", round(info.get('beta', 0), 2))
 
-if __name__ == "__main__":
-    main()
+# if __name__ == "__main__":
+#    main()
+
+from flask import Flask, request, jsonify
+from flask_cors import CORS
+from crew import run_analysis
+
+app = Flask(__name__)
+CORS(app)
+
+@app.route('/api/fundamental-analysis', methods=['GET'])
+def fundamental_analysis():
+    stock_symbol = request.args.get('ticker', 'AAPL')
+    result = run_analysis(stock_symbol)
+    return jsonify(result['fundamental_analysis'])
+
+@app.route('/api/technical-analysis', methods=['GET'])
+def technical_analysis():
+    stock_symbol = request.args.get('ticker', 'AAPL')
+    result = run_analysis(stock_symbol)
+    return jsonify(result['technical_analysis'])
+
+@app.route('/api/competitor-analysis', methods=['GET'])
+def competitor_analysis():
+    stock_symbol = request.args.get('ticker', 'AAPL')
+    result = run_analysis(stock_symbol)
+    return jsonify(result['competitor_analysis'])
+
+@app.route('/api/risk-assessment', methods=['GET'])
+def risk_assessment():
+    stock_symbol = request.args.get('ticker', 'AAPL')
+    result = run_analysis(stock_symbol)
+    return jsonify(result['risk_assessment'])
+
+@app.route('/api/sentiment-analysis', methods=['GET'])
+def sentiment_analysis():
+    stock_symbol = request.args.get('ticker', 'AAPL')
+    result = run_analysis(stock_symbol)
+    return jsonify(result['sentiment_analysis'])
+
+if __name__ == '__main__':
+    app.run(debug=True)
